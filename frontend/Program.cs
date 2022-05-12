@@ -6,12 +6,15 @@ namespace frontend
     {
         private static void Main(string[] args)
         {
-            // Profile
 
-            switch (char.ToUpper(Console.ReadLine()![0]))
-            {
-                case 'H':
-            }
+        }
+
+        private static string AskUser(string prompt)
+        {
+            Console.Write(prompt);
+
+            var input = Console.ReadLine() ?? "";
+            return input.ToLower();
         }
     }
 }
