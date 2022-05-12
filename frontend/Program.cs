@@ -6,9 +6,12 @@ namespace frontend
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("---------------PassManger---------------\n" +
-                              "Input master password: ");
-            Console.WriteLine("\nkey: " + Console.ReadKey(true).KeyChar);
+            // Profile
+
+            switch (char.ToUpper(Console.ReadLine()![0]))
+            {
+                case 'H':
+            }
         }
     }
 }
