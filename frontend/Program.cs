@@ -11,6 +11,7 @@ namespace frontend
             switch (char.ToUpper(Console.ReadLine()![0]))
             {
                 case 'H':
+                    break;
             }
         }
     }

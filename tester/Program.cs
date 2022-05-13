@@ -1,12 +1,13 @@
 ﻿using System;
+using backend;
 
-namespace tester // Note: actual namespace depends on the project name.
+namespace tester
 {
     internal static class Program
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Gello World!");
+            Console.WriteLine("Gello, World!");
         }
     }
 }
