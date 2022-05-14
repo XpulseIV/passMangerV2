@@ -1,4 +1,4 @@
-using System.Reflection;
+using System.Buffers.Binary;
 
 namespace backend;
 
@@ -6,54 +6,55 @@ namespace backend;
 
 public class Filer
 {
-    private Type _type;
-
-    private int _length;
-
-    public Filer(object obj)
+    public static void SaveUser(User user, string filename)
     {
-        _type = obj.GetType();
-        
-        // Recursively get object size
+        var data =
+            FormatInt(user.Name.Length) + user.Name +
+            FormatInt(user.Email.Length) + user.Email +
+            FormatInt(user.MasterPassword.Length) + user.MasterPassword;
 
-        //_length = _type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
+        data = user.ExtraDetails.Aggregate(data,
+            (current, detail) => current + FormatInt(detail.Name.Length) + detail.Name +
+                                 FormatInt(detail.Value.Length) + detail.Value);
+
+        data = user.Credentials.Aggregate(data,
+            (current, credential) => current + FormatInt(credential.Name.Length) + credential.Name +
+                                     FormatInt(credential.Email.Length) + credential.Email +
+                                     FormatInt(credential.Url.Length) + credential.Url +
+                                     FormatInt(credential.Password.Length) + credential.Password);
+
+        StreamWriter writer = new(filename);
+        writer.Write(data);
+        writer.Flush();
+        writer.Close();
     }
-    
-    public int GetTypeSize(Type type)
+
+    private static string FormatInt(int prim)
     {
-        Console.WriteLine(type.FullName);
-        
-        if (type.IsPrimitive)
-        {
-            // Return the amount of bytes the primitive occupies in memory
-            return Type.GetTypeCode(type) switch
-            {
-                TypeCode.Boolean => sizeof(bool),
-                TypeCode.SByte => sizeof(sbyte),
-                TypeCode.Byte => sizeof(byte),
-                TypeCode.Int16 => sizeof(short),
-                TypeCode.UInt16 => sizeof(ushort),
-                TypeCode.Char => sizeof(char),
-                TypeCode.Single => sizeof(float),
-                TypeCode.Int32 => sizeof(int),
-                TypeCode.UInt32 => sizeof(uint),
-                TypeCode.Double => sizeof(double),
-                TypeCode.Int64 => sizeof(long),
-                TypeCode.UInt64 => sizeof(ulong),
-                TypeCode.Decimal => sizeof(decimal),
-                _ => 0
-            };
-        }
-        
-        // array handling, only need to run GetTypeSize on single object
-        if (type.IsArray)
-        {
-            Console.WriteLine(type.FullName);
-        }
-        
-        // Complex type handling with recursion
+        var bytes = new byte[sizeof(int)];
+        BinaryPrimitives.WriteInt32LittleEndian(bytes, prim);
+        return System.Text.Encoding.Default.GetString(bytes);
+    }
 
-
-        return 0;
+    private static int GetPrimitiveSize(Type type)
+    {
+        // Return the amount of bytes the primitive occupies in memory
+        return Type.GetTypeCode(type) switch
+        {
+            TypeCode.Boolean => sizeof(bool),
+            TypeCode.SByte => sizeof(sbyte),
+            TypeCode.Byte => sizeof(byte),
+            TypeCode.Int16 => sizeof(short),
+            TypeCode.UInt16 => sizeof(ushort),
+            TypeCode.Char => sizeof(char),
+            TypeCode.Single => sizeof(float),
+            TypeCode.Int32 => sizeof(int),
+            TypeCode.UInt32 => sizeof(uint),
+            TypeCode.Double => sizeof(double),
+            TypeCode.Int64 => sizeof(long),
+            TypeCode.UInt64 => sizeof(ulong),
+            TypeCode.Decimal => sizeof(decimal),
+            _ => 0
+        };
     }
 }

@@ -4,12 +4,12 @@ namespace backend
 {
     public class User
     {
-        private string Name { get; set; }
-        private string Email { get; set; }
-        private string MasterPassword { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string MasterPassword { get; set; }
 
-        private List<Detail> ExtraDetails { get; set; }
-        private List<Credential> Credentials { get; set; }
+        public List<Detail> ExtraDetails { get; set; }
+        public List<Credential> Credentials { get; set; }
 
         public User(string name, string email, string masterPassword, List<Detail> extraDetails, List<Credential> credentials)
         {
