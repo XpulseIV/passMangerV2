@@ -4,7 +4,7 @@ namespace backend;
 
 public static class PassHasher
 {
-    public static string? HashString(string str)
+    public static string HashString(string str)
     {
         var textBytes = System.Text.Encoding.UTF8.GetBytes(str);
 
