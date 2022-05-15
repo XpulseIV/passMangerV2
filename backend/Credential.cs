@@ -1,17 +1,22 @@
-namespace backend;
-
-public class Credential
+namespace backend
 {
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Url { get; set; }
-    public string Password { get; set; }
-    
-    public Credential(string name, string email, string url, string password)
+    public sealed class Credential
     {
-        Name = name;
-        Email = email;
-        Url = url;
-        Password = password;
+        internal string Name { get; set; }
+        internal string Url { get; set; }
+
+        internal string UserName { get; set; }
+        internal string Email { get; set; }
+        internal string Password { get; set; }
+
+        public Credential(string name, string url, string userName, string email, string password)
+        {
+            Name = name;
+            Url = url;
+
+            UserName = userName;
+            Email = email;
+            Password = password;
+        }
     }
 }

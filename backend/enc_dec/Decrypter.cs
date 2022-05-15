@@ -1,19 +1,25 @@
-namespace backend.enc_dec;
-
-public static class Decrypt
+namespace backend.enc_dec
 {
-    private static void DecryptString(ref string str, ref int[] key)
+    internal static class Decrypter
     {
-        Array.Reverse(key);
-        foreach (var digit in key)
+        internal static string DecryptString(string str, IEnumerable<int> passKey)
         {
-            switch (digit)
+            var charArray = str.ToCharArray();
+
+            var revPassKey = passKey.Reverse();
+
+            foreach (var digit in revPassKey)
             {
+                switch (digit)
+                {
                 case 0:
+                    for (var i = 0; i < charArray.Length; i++) charArray[i]--;
                     break;
                 case 1:
+                    for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)~charArray[i];
                     break;
                 case 2:
+                    for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)(charArray[i] / 2);
                     break;
                 case 3:
                     break;
@@ -41,7 +47,12 @@ public static class Decrypt
                     break;
                 case 15:
                     break;
+                }
             }
+
+            var strStr = new string(charArray);
+
+            return strStr;
         }
     }
 }

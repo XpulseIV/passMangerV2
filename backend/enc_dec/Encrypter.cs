@@ -1,28 +1,23 @@
-namespace backend.enc_dec;
-
-public static class Encrypt
+namespace backend.enc_dec
 {
-    private static void EncryptString(ref string str, ref int[] key)
+    internal static class Encrypter
     {
-        var strCharArray = str.ToCharArray();
-
-        foreach (var digit in key)
+        public static string EncryptString(string str, IEnumerable<int> passKey)
         {
-            switch (digit)
+            var charArray = str.ToCharArray();
+
+            foreach (var digit in passKey)
             {
+                switch (digit)
+                {
                 case 0:
-                    for (var i = 0; i < strCharArray.Length; i++)
-                    {
-                        strCharArray[i]++;
-                    }
+                    for (var i = 0; i < charArray.Length; i++) charArray[i]++;
                     break;
                 case 1:
-                    for (var i = 0; i < strCharArray.Length; i++)
-                    {
-                        strCharArray[i] = (char)~strCharArray[i];
-                    }
+                    for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)~charArray[i];
                     break;
                 case 2:
+                    for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)(charArray[i] * 2);
                     break;
                 case 3:
                     break;
@@ -50,7 +45,12 @@ public static class Encrypt
                     break;
                 case 15:
                     break;
+                }
             }
+
+            var strStr = new string(charArray);
+
+            return strStr;
         }
     }
 }

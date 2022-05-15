@@ -1,13 +1,14 @@
-namespace backend;
-
-public class Detail
+namespace backend
 {
-    public string Name { get; set; }
-    public string Value { get; set; }
-
-    public Detail(string name, string value)
+    public sealed class Detail
     {
-        Name = name;
-        Value = value;
+        internal string Name { get; set; }
+        internal string Value { get; set; }
+
+        public Detail(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }
