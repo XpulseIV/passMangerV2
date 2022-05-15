@@ -6,34 +6,76 @@ namespace backend;
 
 public class Filer
 {
-    public static void SaveUser(User user, string filename)
+    private StreamReader _reader;
+    private StreamWriter _writer;
+
+    public Filer(string filename)
+    {
+        _reader = new StreamReader(filename);
+        _writer = new StreamWriter(filename);
+    }
+    
+    public void SaveUser(User user)
     {
         var data =
             FormatInt(user.Name.Length) + user.Name +
             FormatInt(user.Email.Length) + user.Email +
             FormatInt(user.MasterPassword.Length) + user.MasterPassword;
 
+        data += FormatInt(user.ExtraDetails.Count);
         data = user.ExtraDetails.Aggregate(data,
             (current, detail) => current + FormatInt(detail.Name.Length) + detail.Name +
                                  FormatInt(detail.Value.Length) + detail.Value);
 
+        data += FormatInt(user.Credentials.Count);
         data = user.Credentials.Aggregate(data,
             (current, credential) => current + FormatInt(credential.Name.Length) + credential.Name +
                                      FormatInt(credential.Email.Length) + credential.Email +
                                      FormatInt(credential.Url.Length) + credential.Url +
                                      FormatInt(credential.Password.Length) + credential.Password);
-
-        StreamWriter writer = new(filename);
-        writer.Write(data);
-        writer.Flush();
-        writer.Close();
+        
+        _writer.Write(data);
+        _writer.Flush();
+        _writer.Close();
     }
 
-    private static string FormatInt(int prim)
+    private static string FormatInt(int num)
     {
         var bytes = new byte[sizeof(int)];
-        BinaryPrimitives.WriteInt32LittleEndian(bytes, prim);
+        BinaryPrimitives.WriteInt32LittleEndian(bytes, num);
         return System.Text.Encoding.Default.GetString(bytes);
+    }
+
+    public User LoadUser()
+    {
+        var name = ReadField();
+        var email = ReadField();
+        var masterPassword = ReadField();
+        
+        List<Detail> details = new(ReadInt());
+        for (var i = 0; i < details.Capacity; i++)
+            details.Add(new Detail(ReadField(), ReadField()));
+
+        List<Credential> credentials = new(ReadInt());
+        for (var i = 0; i < credentials.Capacity; i++)
+            credentials.Add(new Credential(ReadField(), ReadField(), ReadField(), ReadField()));
+        
+        return new User(name, email, masterPassword, details, credentials);
+    }
+    
+    private string ReadField()
+    {
+        var chars = new char[ReadInt()];
+        _reader.ReadBlock(chars);
+        return new string(chars);
+    }
+
+    private int ReadInt()
+    {
+        var chars = new char[sizeof(int)];
+        _reader.ReadBlock(chars);
+        var bytes = System.Text.Encoding.Default.GetBytes(chars);
+        return BinaryPrimitives.ReadInt32LittleEndian(bytes);
     }
 
     private static int GetPrimitiveSize(Type type)
