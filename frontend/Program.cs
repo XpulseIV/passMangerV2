@@ -1,40 +1,47 @@
 ﻿using backend;
+using backend.enc_dec;
 
-namespace frontend;
-
-internal static class Program
+namespace frontend
 {
-    private static void Main(string[] args)
+    internal static class Program
     {
-        // Argument support
-        if (args.Length > 0)
+        private static void Main(string[] args)
         {
-            if (args[0] == "login" || args[0] == "l") // Argument login
+            // Argument support
+            if (args.Length > 0)
             {
-                switch (args.Length)
+                if ((args[0] == "login") || (args[0] == "l")) // Argument login
                 {
+                    switch (args.Length)
+                    {
+                    case 1:
+                        Login();
+                        break;
                     case 2: // Username added
                         Login(args[1]);
                         break;
                     case 3: // Username and password added
                         Login(args[1], args[2]);
                         break;
+                    case 4:
+                        Login(args[1], args[2], args[3]);
+                        break;
+                    }
+                }
+
+                if ((args[0] == "create") || (args[0] == "c"))
+                {
+                    Creator.CreateUser();
                 }
             }
 
-            if (args[0] == "create" || args[0] == "c")
+            // Default startup
+            Console.WriteLine("----------------------------------\n" +
+                              "Press 'l' to log in to a user\n" +
+                              "Press 'c' to create a new user\n" +
+                              "Press 'x' to exit");
+            switch (Asker.ForceKey(">", "lcx"))
             {
-                Creator.CreateUser();
-            }
-        }
-
-        // Default startup
-        Console.WriteLine("----------------------------------\n" + 
-                          "Press 'l' to log in to a user\n" +
-                          "Press 'c' to create a new user\n" + 
-                          "Press 'x' to exit");
-        switch (Asker.ForceKey(">", "lcx"))
-        {
             case "l":
                 Login();
                 break;
@@ -43,63 +50,42 @@ internal static class Program
                 break;
             case "x":
                 return;
-        }
-    }
-
-    private static void Login(string username = "", string masterPass = "")
-    {
-        if (username == "")
-        {
-            username = Asker.ForceInput("Enter username: ");
-            masterPass = Asker.GetPassword("Enter master password: ");
-        }
-        else if (masterPass == "")
-        {
-            masterPass = Asker.GetPassword("Enter master password: ");
-        }
-
-        masterPass = PassHasher.HashString(masterPass);
-    }
-
-    private static void Help()
-    {
-        Console.WriteLine("\n" +
-                          "--------------Help Menu--------------" +
-                          "'h' Display this message" +
-                          "'v' View credential" +
-                          "'x' Save and exit program" +
-                          "-------------------------------------"
-        );
-    }
-
-    private static void MainLoop(User user)
-    {
-        Console.WriteLine("Successfully logged in as " + user.Name);
-        Console.WriteLine("Press 'h' to display help menu");
-        var run = true;
-        while (run)
-        {
-            var input = Asker.ForceKey(">", "hvx");
-
-            switch (input)
-            {
-                case "h":
-                    Help();
-                    break;
-                case "v":
-                    ViewCredential(user.Credentials);
-                    break;
-                case "x":
-                    run = false;
-                    break;
             }
         }
-        new Filer(user.Name + ".user").SaveUser(user);
-    }
 
-    private static void ViewCredential(List<Credential> credentials)
-    {
-        var search = Asker.ForceInput("Enter credential name: ");
-        credentials.Find(x => x.Name.Contains(search));
+        private static void Login(string userName = "", string masterPass = "", string fileName = "")
+        {
+            if (userName == "")
+            {
+                userName = Asker.ForceInput("Enter username: ");
+                masterPass = Asker.GetPassword("Enter master password: ");
+            }
+            else if (masterPass == "")
+            {
+                masterPass = Asker.GetPassword("Enter master password: ");
+            }
+
+            if (fileName == "") fileName = Asker.AskUser("Enter name of file");
+
+            
+            
+            var user = FilerDeluxe.LoadUser(fileName, passKey);
+        }
+
+        private static void Help()
+        {
+            Console.WriteLine("\n" +
+                              "--------------Help Menu--------------" +
+                              "'h' Display this message" +
+                              "'v' View credential" +
+                              "'x' Save and exit program" +
+                              "-------------------------------------"
+            );
+        }
+
+        private static void MainLoop(User user)
+        {
+            
+        }
     }
 }

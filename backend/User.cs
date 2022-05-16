@@ -2,11 +2,12 @@
 
 namespace backend
 {
+    [Serializable]
     public sealed class User
     {
-        internal string Name { get; private set; }
-        internal string Email { get; private set; }
-        internal string MasterPassword { get; private set; }
+        internal string Name { get; set; }
+        internal string Email { get; set; }
+        internal string MasterPassword { get; set; }
         internal List<Detail> ExtraDetails { get; }
         internal List<Credential> Credentials { get; }
         internal List<Key> Keys { get; }

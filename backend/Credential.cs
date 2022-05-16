@@ -1,5 +1,6 @@
 namespace backend
 {
+    [Serializable]
     public sealed class Credential
     {
         internal string Name { get; set; }

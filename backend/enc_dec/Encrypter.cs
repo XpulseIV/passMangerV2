@@ -17,7 +17,6 @@ namespace backend.enc_dec
                     for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)~charArray[i];
                     break;
                 case 2:
-                    for (var i = 0; i < charArray.Length; i++) charArray[i] = (char)(charArray[i] * 2);
                     break;
                 case 3:
                     break;

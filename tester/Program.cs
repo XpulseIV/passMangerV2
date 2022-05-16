@@ -6,12 +6,10 @@ namespace tester
     {
         private static void Main(string[] args)
         {
-            Filer filer = new("lel");
-
             User user = new(
-                "Malte Axner",
+                "Malte",
                 "test99480@gmail.com",
-                "IsakIsBadV2.0",
+                PassHasher.HashString("IsakIsBadLeLV2.0"),
                 new List<Detail>
                 {
                     new("detail1", "value1"),
@@ -46,13 +44,12 @@ namespace tester
                     new("name8", "url8", "keystring8")
                 });
 
-            var key = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var keyPass = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-            filer.SaveUser(user, key);
+            FilerDeluxe.SaveUser(user, "lel.bin", keyPass);
 
-            user = filer.LoadUser(key);
-
-            user.Display();
+            var userCopy = FilerDeluxe.LoadUser("lel.bin", keyPass);
+            userCopy.Display();
         }
     }
 }

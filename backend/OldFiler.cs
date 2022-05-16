@@ -4,21 +4,19 @@ namespace backend
 {
     // Generic Filer
 
-    public sealed class Filer
+    public sealed class OldFiler
     {
         private readonly StreamReader _reader;
         private readonly StreamWriter _writer;
 
-        public Filer(string filename)
+        public OldFiler(string filename)
         {
             _writer = new StreamWriter(filename);
             _reader = new StreamReader(filename);
         }
 
-        public void SaveUser(User user, int[] passKey)
+        public void SaveUser(User user)
         {
-            user.Encrypt(passKey);
-
             var data =
                 FormatInt(user.Name.Length) + user.Name +
                 FormatInt(user.Email.Length) + user.Email +
@@ -58,7 +56,7 @@ namespace backend
             return System.Text.Encoding.Default.GetString(bytes);
         }
 
-        public User LoadUser(int[] passKey)
+        public User LoadUser()
         {
             var name = ReadField();
             var email = ReadField();
@@ -93,8 +91,6 @@ namespace backend
             }
 
             User user = new(name, email, masterPassword, details, credentials, keys);
-
-            user.Decrypt(passKey);
 
             return user;
         }
