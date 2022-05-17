@@ -1,4 +1,7 @@
-﻿namespace backend
+﻿using System;
+using System.Collections.Generic;
+
+namespace backend
 {
     [Serializable]
     public sealed class User

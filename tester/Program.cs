@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using backend;
 
@@ -9,8 +10,8 @@ namespace tester
         private static void Main(string[] args)
         {
             User user = new(
-                "Malte Axner",
-                "test99480@gmail.com",
+                "testUser",
+                "testMail@test.com",
                 PassHasher.HashString("IsakIsBadLeLV2.0"),
                 new List<Detail>
                 {
@@ -48,11 +49,7 @@ namespace tester
 
             var key = PassHasher.GetEncryptionKey(user.MasterPassword);
 
-            XmlFilerDeluxe.SaveUser("lel.xml", user, key);
-
-            var userCopy = XmlFilerDeluxe.LoadUser("lel.xml", key);
-
-            userCopy.Display();
+            XmlFilerDeluxe.SaveUser(user.Name + ".user", user, key);
         }
     }
 }

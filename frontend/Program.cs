@@ -1,4 +1,6 @@
-﻿using backend;
+﻿using System;
+using System.IO;
+using backend;
 
 namespace frontend
 {
@@ -51,42 +53,33 @@ namespace frontend
 
         private static void Login(string userName = "", string masterPass = "")
         {
-            while (true) // Loop instead of recursion to prevent stack overflow since User can be big
+            // Asking for things that are not passed in
+            if (userName == "")
             {
-                // Asking for things that are not passed in
-                if (userName == "")
-                {
-                    userName = Asker.ForceInput("Enter username: ");
-                    masterPass = Asker.GetPassword("Enter master password: ");
-                }
-                else if (masterPass == "")
-                {
-                    masterPass = Asker.GetPassword("Enter master password: ");
-                }
-
-                // Hash the master password after making sure it exists
-                masterPass = PassHasher.HashString(masterPass);
-
-                try
-                {
-                    var user = XmlFilerDeluxe.LoadUser(userName + ".user", PassHasher.GetEncryptionKey(masterPass));
-                    if (masterPass == user.MasterPassword)
-                        MainLoop(user);
-                    else
-                    {
-                        Console.WriteLine("Incorrect credentials. Please retry");
-                        userName = "";
-                        masterPass = "";
-                        
-                    }
-                }
-                catch (FileNotFoundException)
-                {
-                    Console.WriteLine("User not found. Please retry");
-                    userName = "";
-                    masterPass = "";
-                }
+                userName = Asker.ForceInput("Enter username: ");
+                masterPass = Asker.GetPassword("Enter master password: ");
             }
+            else if (masterPass == "")
+            {
+                masterPass = Asker.GetPassword("Enter master password: ");
+            }
+
+            while (!File.Exists(userName + ".user"))
+            {
+                userName = Asker.ForceInput("Enter username: ");
+            }
+
+            // Hash the master password after making sure it exists
+            masterPass = PassHasher.HashString(masterPass);
+
+            var user = XmlFilerDeluxe.LoadUser(userName + ".user", PassHasher.GetEncryptionKey(masterPass));
+
+            while (masterPass != user.MasterPassword)
+            {
+                masterPass = PassHasher.HashString(Asker.GetPassword("Enter master password: "));
+            }
+
+            Program.MainLoop(user);
         }
 
         private static void Help()
@@ -100,9 +93,21 @@ namespace frontend
             );
         }
 
-        private static void MainLoop(User user)
+        private static void MlHelp()
         {
             
+        }
+
+        private static void MainLoop(User user)
+        {
+            Console.WriteLine("Logged in to: " + user.Name +
+                              " \nType h to see what options are available");
+
+            var running = true;
+            while (running)
+            {
+                Asker.ForceKey("", "");
+            }
         }
     }
 }
