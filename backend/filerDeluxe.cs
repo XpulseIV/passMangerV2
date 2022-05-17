@@ -68,7 +68,7 @@ namespace backend
 
         public static User LoadUser(string fileName, string key)
         {
-            var user = XmlFilerDeluxe.ReadFromXmlFile<User>(fileName);
+            var user = ReadFromXmlFile<User>(fileName);
 
             return user.Decrypt(key);
         }
