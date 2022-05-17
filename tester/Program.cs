@@ -46,11 +46,11 @@ namespace tester
                     new("name8", "url8", "keystring8")
                 });
 
-            var keyPass = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var key = PassHasher.GetEncryptionKey(user.MasterPassword);
 
-            XmlFilerDeluxe.SaveUser("lel.xml", user);
+            XmlFilerDeluxe.SaveUser("lel.xml", user, key);
 
-            var userCopy = XmlFilerDeluxe.LoadUser("lel.xml");
+            var userCopy = XmlFilerDeluxe.LoadUser("lel.xml", key);
 
             userCopy.Display();
         }

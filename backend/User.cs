@@ -72,5 +72,87 @@
 
             Console.WriteLine(userInfoStr);
         }
+
+        public User Encrypt(string Key)
+        {
+            User user = new()
+            {
+                Name = AesImpl.EncryptString(this.Name, Key),
+                Email = AesImpl.EncryptString(this.Email, Key),
+                MasterPassword = AesImpl.EncryptString(this.MasterPassword, Key)
+            };
+
+            foreach (var detail in ExtraDetails)
+            {
+                var newDetailName = AesImpl.EncryptString(detail.Name, Key);
+                var newDetailValue = AesImpl.EncryptString(detail.Value, Key);
+
+                user.ExtraDetails.Add(new Detail(newDetailName, newDetailValue));
+            }
+
+            foreach (var credential in Credentials)
+            {
+                var newCredentialName = AesImpl.EncryptString(credential.Name, Key);
+                var newCredentialUrl = AesImpl.EncryptString(credential.Url, Key);
+
+                var newCredentialUserName = AesImpl.EncryptString(credential.UserName, Key);
+                var newCredentialEmail = AesImpl.EncryptString(credential.Email, Key);
+                var newCredentialPassword = AesImpl.EncryptString(credential.Password, Key);
+
+                user.Credentials.Add(new Credential(newCredentialName, newCredentialUrl, newCredentialUserName, newCredentialEmail, newCredentialPassword));
+            }
+
+            foreach (var key in Keys)
+            {
+                var newKeyName = AesImpl.EncryptString(key.Name, Key);
+                var newKeyUrl = AesImpl.EncryptString(key.Url, Key);
+                var newKeyKeyString = AesImpl.EncryptString(key.KeyString, Key);
+
+                user.Keys.Add(new Key(newKeyName, newKeyUrl, newKeyKeyString));
+            }
+
+            return user;
+        }
+
+        internal User Decrypt(string Key)
+        {
+            User user = new()
+            {
+                Name = AesImpl.DecryptString(this.Name, Key),
+                Email = AesImpl.DecryptString(this.Email, Key),
+                MasterPassword = AesImpl.DecryptString(this.MasterPassword, Key)
+            };
+
+            foreach (var detail in ExtraDetails)
+            {
+                var newDetailName = AesImpl.DecryptString(detail.Name, Key);
+                var newDetailValue = AesImpl.DecryptString(detail.Value, Key);
+
+                user.ExtraDetails.Add(new Detail(newDetailName, newDetailValue));
+            }
+
+            foreach (var credential in Credentials)
+            {
+                var newCredentialName = AesImpl.DecryptString(credential.Name, Key);
+                var newCredentialUrl = AesImpl.DecryptString(credential.Url, Key);
+
+                var newCredentialUserName = AesImpl.DecryptString(credential.UserName, Key);
+                var newCredentialEmail = AesImpl.DecryptString(credential.Email, Key);
+                var newCredentialPassword = AesImpl.DecryptString(credential.Password, Key);
+
+                user.Credentials.Add(new Credential(newCredentialName, newCredentialUrl, newCredentialUserName, newCredentialEmail, newCredentialPassword));
+            }
+
+            foreach (var key in Keys)
+            {
+                var newKeyName = AesImpl.DecryptString(key.Name, Key);
+                var newKeyUrl = AesImpl.DecryptString(key.Url, Key);
+                var newKeyKeyString = AesImpl.DecryptString(key.KeyString, Key);
+
+                user.Keys.Add(new Key(newKeyName, newKeyUrl, newKeyKeyString));
+            }
+
+            return user;
+        }
     }
 }

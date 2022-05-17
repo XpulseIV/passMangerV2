@@ -59,14 +59,18 @@ namespace backend
             }
         }
 
-        public static void SaveUser(string fileName, User user)
+        public static void SaveUser(string fileName, User user, string key)
         {
+            user = user.Encrypt(key);
+
             WriteToXmlFile(fileName, user);
         }
 
-        public static User LoadUser(string fileName)
+        public static User LoadUser(string fileName, string key)
         {
-            return XmlFilerDeluxe.ReadFromXmlFile<User>(fileName);
+            var user = XmlFilerDeluxe.ReadFromXmlFile<User>(fileName);
+
+            return user.Decrypt(key);
         }
     }
 }

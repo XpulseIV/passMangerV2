@@ -22,9 +22,6 @@ namespace frontend
                     case 3: // Username and password added
                         Login(args[1], args[2]);
                         break;
-                    case 4:
-                        Login(args[1], args[2], args[3]);
-                        break;
                     }
                 }
 
