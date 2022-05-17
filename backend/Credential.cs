@@ -3,12 +3,11 @@ namespace backend
     [Serializable]
     public sealed class Credential
     {
-        internal string Name { get; set; }
-        internal string Url { get; set; }
-
-        internal string UserName { get; set; }
-        internal string Email { get; set; }
-        internal string Password { get; set; }
+        public string Name;
+        public string Url;
+        public string UserName;
+        public string Email;
+        public string Password;
 
         public Credential(string name, string url, string userName, string email, string password)
         {
@@ -18,6 +17,16 @@ namespace backend
             UserName = userName;
             Email = email;
             Password = password;
+        }
+
+        public Credential()
+        {
+            Name = "";
+            Url = "";
+
+            UserName = "";
+            Email = "";
+            Password = "";
         }
     }
 }

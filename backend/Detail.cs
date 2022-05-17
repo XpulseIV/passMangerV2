@@ -3,13 +3,19 @@ namespace backend
     [Serializable]
     public sealed class Detail
     {
-        internal string Name { get; set; }
-        internal string Value { get; set; }
+        public string Name;
+        public string Value;
 
         public Detail(string name, string value)
         {
             Name = name;
             Value = value;
+        }
+
+        public Detail()
+        {
+            Name = "";
+            Value = "";
         }
     }
 }

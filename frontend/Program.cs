@@ -1,5 +1,4 @@
 ﻿using backend;
-using backend.enc_dec;
 
 namespace frontend
 {
@@ -66,10 +65,6 @@ namespace frontend
             }
 
             if (fileName == "") fileName = Asker.AskUser("Enter name of file");
-
-            
-            
-            var user = FilerDeluxe.LoadUser(fileName, passKey);
         }
 
         private static void Help()
