@@ -49,19 +49,44 @@ namespace frontend
             }
         }
 
-        private static void Login(string userName = "", string masterPass = "", string fileName = "")
+        private static void Login(string userName = "", string masterPass = "")
         {
-            if (userName == "")
+            while (true) // Loop instead of recursion to prevent stack overflow since User can be big
             {
-                userName = Asker.ForceInput("Enter username: ");
-                masterPass = Asker.GetPassword("Enter master password: ");
-            }
-            else if (masterPass == "")
-            {
-                masterPass = Asker.GetPassword("Enter master password: ");
-            }
+                // Asking for things that are not passed in
+                if (userName == "")
+                {
+                    userName = Asker.ForceInput("Enter username: ");
+                    masterPass = Asker.GetPassword("Enter master password: ");
+                }
+                else if (masterPass == "")
+                {
+                    masterPass = Asker.GetPassword("Enter master password: ");
+                }
 
-            if (fileName == "") fileName = Asker.AskUser("Enter name of file");
+                // Hash the master password after making sure it exists
+                masterPass = PassHasher.HashString(masterPass);
+
+                try
+                {
+                    var user = XmlFilerDeluxe.LoadUser(userName + ".user", PassHasher.GetEncryptionKey(masterPass));
+                    if (masterPass == user.MasterPassword)
+                        MainLoop(user);
+                    else
+                    {
+                        Console.WriteLine("Incorrect credentials. Please retry");
+                        userName = "";
+                        masterPass = "";
+                        
+                    }
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("User not found. Please retry");
+                    userName = "";
+                    masterPass = "";
+                }
+            }
         }
 
         private static void Help()

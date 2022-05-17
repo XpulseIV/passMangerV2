@@ -8,10 +8,10 @@ namespace frontend
         {
             var name = Asker.ForceInput("Enter username: ");
             var email = Asker.AskUser("Enter email: ");
-            var masterPassword = PassHasher.HashString(Asker.GetPassword("Enter master password: "));
+            var masterPassword = PassHasher.HashString(Asker.ForceInput("Enter master password: "));
             var details = CreateDetailList();
             var credentials = CreateCredentialList();
-            var keys = Creator.CreateKeyList();
+            var keys = CreateKeyList();
 
             return new User(name, email, masterPassword, details, credentials, keys);
         }
@@ -59,8 +59,8 @@ namespace frontend
                 Asker.AskUser("Enter credential name: "),
                 Asker.AskUser("Enter credential url: "),
                 Asker.AskUser("Enter credential username: "),
-                Asker.AskUser("Enter credential email"),
-                Asker.GetPassword("Enter credential password"));
+                Asker.AskUser("Enter credential email: "),
+                Asker.AskUser("Enter credential password: "));
         }
 
         private static List<Key> CreateKeyList()
