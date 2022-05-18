@@ -17,19 +17,24 @@ namespace frontend
                     {
                     case 1:
                         Login();
+                        Environment.Exit(0);
                         break;
                     case 2: // Username added
                         Login(args[1]);
+                        Environment.Exit(0);
                         break;
                     case 3: // Username and password added
                         Login(args[1], args[2]);
+                        Environment.Exit(0);
                         break;
                     }
                 }
 
                 if ((args[0] == "create") || (args[0] == "c"))
                 {
-                    Creator.CreateUser();
+                    var user = Creator.CreateUser();
+                    MainLoop(user);
+                    Environment.Exit(0);
                 }
             }
 
@@ -42,18 +47,21 @@ namespace frontend
             {
             case "l":
                 Login();
+                Environment.Exit(0);
                 break;
             case "c":
                 MainLoop(Creator.CreateUser());
+                Environment.Exit(0);
                 break;
             case "x":
+                Environment.Exit(0);
                 return;
             }
         }
 
         private static void Login(string userName = "", string masterPass = "")
         {
-            // Asking for things that are not passed in
+            // Asking for the things that are not passed in
             if (userName == "")
             {
                 userName = Asker.ForceInput("Enter username: ");
@@ -87,15 +95,9 @@ namespace frontend
             Console.WriteLine("\n" +
                               "--------------Help Menu--------------" +
                               "'h' Display this message" +
-                              "'v' View credential" +
                               "'x' Save and exit program" +
                               "-------------------------------------"
             );
-        }
-
-        private static void MlHelp()
-        {
-            
         }
 
         private static void MainLoop(User user)
@@ -106,7 +108,11 @@ namespace frontend
             var running = true;
             while (running)
             {
-                Asker.ForceKey("", "");
+                switch (Asker.ForceKey("", ""))
+                {
+                    case 'h':
+                        break;
+                }
             }
         }
     }
