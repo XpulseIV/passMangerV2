@@ -104,15 +104,15 @@ namespace frontend
         {
             Console.WriteLine("Logged in to: " + user.Name +
                               " \nType h to see what options are available");
-
+            
+            var SelectedDetail = new Detail();
+            var SelectedCredential = new Credential();
+            var selectedKey = new Key();
+            
             var running = true;
             while (running)
             {
-                switch (Asker.ForceKey("", ""))
-                {
-                    case 'h':
-                        break;
-                }
+            A                      
             }
         }
     }
