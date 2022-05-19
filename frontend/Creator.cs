@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using backend;
 
 namespace frontend
 {
     internal static class Creator
     {
-        public static User CreateUser()
+        public static User? CreateUser()
         {
             var name = Asker.ForceInput("Enter username: ");
             var email = Asker.AskUser("Enter email: ");
@@ -33,7 +31,7 @@ namespace frontend
             return details;
         }
 
-        private static Detail CreateDetail()
+        public static Detail CreateDetail()
         {
             return new Detail(
                 Asker.AskUser("Enter detail name: "),
@@ -55,7 +53,7 @@ namespace frontend
             return credentials;
         }
 
-        private static Credential CreateCredential()
+        public static Credential CreateCredential()
         {
             return new Credential(
                 Asker.AskUser("Enter credential name: "),
@@ -80,7 +78,7 @@ namespace frontend
             return keys;
         }
 
-        private static Key CreateKey()
+        public static Key CreateKey()
         {
             return new Key(
                 Asker.AskUser("Enter key name: "),

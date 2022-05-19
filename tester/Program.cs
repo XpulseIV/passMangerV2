@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using backend;
+﻿using backend;
 
 namespace tester
 {
@@ -9,7 +6,7 @@ namespace tester
     {
         private static void Main(string[] args)
         {
-            User user = new(
+            User? user = new(
                 "testUser",
                 "testMail@test.com",
                 PassHasher.HashString("IsakIsBadLeLV2.0"),

@@ -1,4 +1,3 @@
-using System.IO;
 using System.Xml.Serialization;
 
 namespace backend
@@ -21,9 +20,9 @@ namespace backend
         /// <param name="filePath">The file path to write the object instance to.</param>
         /// <param name="objectToWrite">The object instance to write to the file.</param>
         /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToXmlFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
+        private static void WriteToXmlFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
         {
-            TextWriter writer = null;
+            TextWriter? writer = null;
             try
             {
                 var serializer = new XmlSerializer(typeof(T));
@@ -32,8 +31,7 @@ namespace backend
             }
             finally
             {
-                if (writer != null)
-                    writer.Close();
+                writer?.Close();
             }
         }
 
@@ -44,25 +42,24 @@ namespace backend
         /// <typeparam name="T">The type of object to read from the file.</typeparam>
         /// <param name="filePath">The file path to read the object instance from.</param>
         /// <returns>Returns a new instance of the object read from the XML file.</returns>
-        public static T ReadFromXmlFile<T>(string filePath) where T : new()
+        private static T ReadFromXmlFile<T>(string filePath) where T : new()
         {
-            TextReader reader = null;
+            TextReader? reader = null;
             try
             {
                 var serializer = new XmlSerializer(typeof(T));
                 reader = new StreamReader(filePath);
-                return (T)serializer.Deserialize(reader);
+                return (T)serializer.Deserialize(reader)!;
             }
             finally
             {
-                if (reader != null)
-                    reader.Close();
+                reader?.Close();
             }
         }
 
-        public static void SaveUser(string fileName, User user, string key)
+        public static void SaveUser(string fileName, User? user, string key)
         {
-            user = user.Encrypt(key);
+            user = user?.Encrypt(key);
 
             WriteToXmlFile(fileName, user);
         }

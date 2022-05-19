@@ -1,5 +1,3 @@
-using System;
-
 namespace frontend
 {
     internal static class Asker
