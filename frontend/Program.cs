@@ -15,7 +15,7 @@ namespace frontend
                     {
                     case 1:
                         Login();
-                        Environment.Exit(0);
+                        Environment.Exit(0); // Why not use return?
                         break;
                     case 2: // Username added
                         Login(args[1]);
@@ -70,7 +70,7 @@ namespace frontend
             }
             else if (masterPass == "")
             {
-                masterPass = Asker.GetPassword("Enter master password: ");
+                masterPass = Asker.ForcePassword("Enter master password: ");
             }
 
             while (!File.Exists(userName + ".user"))
@@ -87,7 +87,7 @@ namespace frontend
 
             while (masterPass != user.MasterPassword)
             {
-                masterPass = PassHasher.HashString(Asker.GetPassword("Enter master password: "));
+                masterPass = PassHasher.HashString(Asker.ForcePassword("Enter master password: "));
             }
 
             MainLoop(user, userName + ".user", passKey);
@@ -108,24 +108,24 @@ namespace frontend
             );
         }
 
-        private static void MainLoop(User? user, string fileName, string passKey)
+        private static void MainLoop(User user, string fileName, string passKey)
         {
             Console.WriteLine("Logged in to: " + user.Name +
-                              " \nType h to see what options are available");
+                              " \nPress 'h' to see what options are available");
 
-            var selectedDetailIndex = new int();
-            var selectedCredentialIndex = new int();
-            var selectedKeyIndex = new int();
+            var selectedDetailIndex = int.MaxValue; // Why int.MaxValue instead of -1?
+            var selectedCredentialIndex = int.MaxValue;
+            var selectedKeyIndex = int.MaxValue;
 
             var running = true;
             while (running)
             {
                 switch (Asker.ForceKey(">", "HLSMARXhlsmarx"))
                 {
-                case "H" or "h":
+                case "H" or "h": // Help menu
                     Help();
                     break;
-                case "L" or "l":
+                case "L" or "l": // List content
                     var modeList = Asker.ForceKey("Enter listing mode, ([D]etail, [C]redential [K]ey): ", "DCKdck");
 
                     switch (modeList)
@@ -161,7 +161,7 @@ namespace frontend
                     }
 
                     break;
-                case "S" or "s":
+                case "S" or "s": // Select content
                     var modeSelect = Asker.ForceKey("Enter selection mode, ([D]etail, [C]redential [K]ey): ", "DCKdck");
                     switch (modeSelect)
                     {
@@ -272,10 +272,15 @@ namespace frontend
                         selectedKeyIndex = int.MaxValue;
                     }
 
+                    else
+                    {
+                        Console.WriteLine("Please select something first");
+                    }
+
                     break;
 
-                case "A" or "a":
-                    var objectTypeAdd = Asker.ForceKey("Enter object type, ([D]etail, [C]redential [K]ey): ", "DCKdck");
+                case "A" or "a": // Add content
+                    var objectTypeAdd = Asker.ForceKey("Enter object type, ([D]etail, [C]redential, [K]ey): ", "DCKdck");
 
                     switch (objectTypeAdd)
                     {
@@ -291,7 +296,7 @@ namespace frontend
                     }
 
                     break;
-                case "R" or "r":
+                case "R" or "r": // Remove content
                     if (selectedDetailIndex != int.MaxValue)
                     {
                         user.ExtraDetails.Remove(user.ExtraDetails[selectedDetailIndex]);
@@ -310,9 +315,14 @@ namespace frontend
                         selectedKeyIndex = int.MaxValue;
                     }
 
+                    else
+                    {
+                        Console.WriteLine("Please select something first");
+                    }
+
                     break;
 
-                case "X" or "x":
+                case "X" or "x": // Save and Exit
                     XmlFilerDeluxe.SaveUser(fileName, user, passKey);
                     running = false;
                     break;

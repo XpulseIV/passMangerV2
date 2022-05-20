@@ -4,11 +4,23 @@ namespace frontend
 {
     internal static class Creator
     {
-        public static User? CreateUser()
+        public static User CreateUser()
         {
             var name = Asker.ForceInput("Enter username: ");
             var email = Asker.AskUser("Enter email: ");
-            var masterPassword = PassHasher.HashString(Asker.ForceInput("Enter master password: "));
+            var masterPassword = Asker.ForcePassword("Enter master password: ");
+            
+            // Confirmation
+            Console.WriteLine("Confirm master password. Press enter on new line to go back");
+            var confirm = Asker.GetPassword("Confirm master password: ");
+            while (confirm != masterPassword)
+            {
+                if (confirm == "") masterPassword = Asker.ForcePassword("Enter master password: ");
+                confirm = Asker.GetPassword("Confirm master password: ");
+            }
+
+            masterPassword = PassHasher.HashString(masterPassword);
+
             var details = CreateDetailList();
             var credentials = CreateCredentialList();
             var keys = CreateKeyList();
@@ -20,13 +32,15 @@ namespace frontend
         {
             var details = new List<Detail>();
 
-            Console.WriteLine("Creating details. Press 'x' to skip");
+            Console.WriteLine("Creating details. Press 'x' to skip. Press any other key to continue");
             var go = Console.ReadKey().KeyChar != 'x';
             while (go)
             {
                 details.Add(CreateDetail());
                 go = Asker.ForceKey("Add more details? [y,n]: ", "yn") == "y";
             }
+            
+            if (details.Count == 0) Console.WriteLine();
 
             return details;
         }
@@ -42,13 +56,15 @@ namespace frontend
         {
             var credentials = new List<Credential>();
 
-            Console.WriteLine("Creating credentials. Press 'x' to skip");
+            Console.WriteLine("Creating credentials. Press 'x' to skip. Press any other key to continue");
             var go = Console.ReadKey().KeyChar != 'x';
             while (go)
             {
                 credentials.Add(CreateCredential());
                 go = Asker.ForceKey("Add more credentials? [y,n]: ", "yn") == "y";
             }
+            
+            if (credentials.Count == 0) Console.WriteLine();
 
             return credentials;
         }
@@ -67,13 +83,15 @@ namespace frontend
         {
             var keys = new List<Key>();
 
-            Console.WriteLine("Creating keys. Press 'x' to skip");
+            Console.WriteLine("Creating keys. Press 'x' to skip. Press any other key to continue");
             var go = Console.ReadKey().KeyChar != 'x';
             while (go)
             {
                 keys.Add(CreateKey());
                 go = Asker.ForceKey("Add more keys? [y,n]: ", "yn") == "y";
             }
+            
+            if (keys.Count == 0) Console.WriteLine();
 
             return keys;
         }

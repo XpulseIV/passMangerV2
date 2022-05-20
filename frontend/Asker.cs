@@ -13,7 +13,7 @@ namespace frontend
         public static string ForceInput(string prompt)
         {
             var input = "";
-            while (input == "") input = Asker.AskUser(prompt);
+            while (input == "") input = AskUser(prompt);
 
             return input;
         }
@@ -47,6 +47,14 @@ namespace frontend
             Console.WriteLine();
 
             return password;
+        }
+
+        public static string ForcePassword(string prompt)
+        {
+            var input = "";
+            while (input == "") input = GetPassword(prompt);
+
+            return input;
         }
     }
 }
