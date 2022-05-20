@@ -90,7 +90,7 @@ namespace frontend
                 masterPass = PassHasher.HashString(Asker.GetPassword("Enter master password: "));
             }
 
-            Program.MainLoop(user, userName + ".user", passKey);
+            MainLoop(user, userName + ".user", passKey);
         }
 
         private static void Help()
@@ -223,20 +223,29 @@ namespace frontend
                             break;
                         }
 
-                        selectedDetailIndex = int.MaxValue;
+                        selectedDetailIndex = int.MaxValue; // Why unselect?
                     }
 
                     else if (selectedCredentialIndex != int.MaxValue)
                     {
-                        var whatToModify = Asker.ForceKey("Enter what in credential to modify ([N]ame, [U]rl, [U]serName, [E]mail, [P]assword): ", "NUUEPnuuep");
+                        var whatToModify = Asker.ForceKey("Enter what in credential to modify ([N]ame, [U]rl, U[S]erName, [E]mail, [P]assword): ", "NUSEPnusep");
 
                         switch (whatToModify)
                         {
                         case "N" or "n":
                             user.ExtraDetails[selectedDetailIndex].Name = Asker.AskUser("Enter new name: ");
                             break;
-                        case "V" or "v":
-                            user.ExtraDetails[selectedDetailIndex].Value = Asker.AskUser("Enter new Value: ");
+                        case "U" or "u":
+                            user.Credentials[selectedCredentialIndex].Url = Asker.AskUser("Enter new url: ");
+                            break;
+                        case "S" or "s":
+                            user.Credentials[selectedCredentialIndex].UserName = Asker.AskUser("Enter new username: ");
+                            break;
+                        case "E" or "s":
+                            user.Credentials[selectedCredentialIndex].Email = Asker.AskUser("Enter new email: ");
+                            break;
+                        case "P" or "p":
+                            user.Credentials[selectedCredentialIndex].Password = Asker.AskUser("Enter new password: ");
                             break;
                         }
 
@@ -245,6 +254,21 @@ namespace frontend
 
                     else if (selectedKeyIndex != int.MaxValue)
                     {
+                        var whatToModify = Asker.ForceKey("Enter what in credential to modify ([N]ame, [U]rl, [K]ey): ", "NUKnuk");
+                        
+                        switch (whatToModify)
+                        {
+                            case "N" or "n":
+                                user.Keys[selectedKeyIndex].Name = Asker.AskUser("Enter new name: ");
+                                break;
+                            case "U" or "u":
+                                user.Keys[selectedKeyIndex].Url = Asker.AskUser("Enter new url: ");
+                                break;
+                            case "K" or "k":
+                                user.Keys[selectedKeyIndex].KeyString = Asker.AskUser("Enter new key: ");
+                                break;
+                        }
+                        
                         selectedKeyIndex = int.MaxValue;
                     }
 
